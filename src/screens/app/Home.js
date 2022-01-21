@@ -1,4 +1,5 @@
 import React, { createRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
 	StyleSheet,
 	SafeAreaView,
@@ -20,6 +21,8 @@ const sheet_height_ios = height * 0.8;
 const sheet_height_android = height * 0.75;
 
 const Home = ({ navigation }) => {
+	// let authUser = useSelector((state) => state?.auth?.user);
+
 	const openSurveyDetails = () => {
 		actionSheetRef.current?.setModalVisible(false);
 		navigation.navigate('SurveyDetails');
@@ -93,7 +96,7 @@ const Home = ({ navigation }) => {
 					style={{ paddingHorizontal: 20, marginBottom: 95, paddingBottom: 5 }}
 					showsVerticalScrollIndicator={false}
 				>
-					<Text style={styles.textGreetings}>Hey, Ambrose!</Text>
+					<Text style={styles.textGreetings}>Hey, User!</Text>
 					<Text style={styles.textTitle}>Pick Best Survey For You</Text>
 					<Text style={styles.textSubtitle}>Existing Survey</Text>
 					<View style={styles.surveyContainer}>

@@ -30,7 +30,7 @@ export default function AuthReducer(state = initialState, action) {
 			return {
 				...state,
 				...action.payload,
-				isAuthenticated: false,
+				isAuthenticated: true,
 				isLoading: false,
 			};
 		case AUTH_ERROR:

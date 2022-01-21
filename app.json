@@ -6,7 +6,7 @@
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
-			"image": "./assets/survey-app.jpeg",
+			"image": "./assets/nikiai-logo.png",
 			"resizeMode": "contain",
 			"backgroundColor": "#ffffff"
 		},

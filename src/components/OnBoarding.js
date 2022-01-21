@@ -5,7 +5,7 @@ import Paginator from './Paginator';
 import NextButton from './NextButton';
 import slides from '../../slides';
 
-const OnBoarding = () => {
+const OnBoarding = ({ navigation }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const scrollX = useRef(new Animated.Value(0)).current;
 	const slidesRef = useRef(null);
@@ -20,7 +20,7 @@ const OnBoarding = () => {
 		if (currentIndex < slides.length - 1) {
 			slidesRef.current.scrollToIndex({ index: currentIndex + 1 });
 		} else {
-			console.log('Last Item');
+			navigation.navigate('Login');
 		}
 	};
 
