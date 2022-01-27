@@ -40,6 +40,33 @@ const styles = StyleSheet.create({
 			},
 		}),
 	},
+	// Surveyee Form
+	inputFormContainer: {
+		backgroundColor: 'rgba(255,255,255,1)',
+		padding: 20,
+		marginTop: height / 8,
+		borderRadius: 20,
+		width: width / 1.2,
+		height: height / 1.5,
+		...Platform.select({
+			ios: {
+				shadowColor: 'gray',
+				shadowOffset: {
+					width: 0,
+					height: 2,
+				},
+				shadowOpacity: 0.25,
+				shadowRadius: 3.5,
+			},
+			android: {
+				elevation: -5, // its negative to allow effective box shadow
+				position: 'relative',
+				borderWidth: 1,
+				borderColor: '#f3f3f3',
+				zIndex: 50,
+			},
+		}),
+	},
 });
 
 export { styles };

@@ -14,6 +14,7 @@ import {
 } from '../screens/app';
 
 const HomeStackScreen = createStackNavigator();
+const ProfileStackScreen = createStackNavigator();
 
 export const HomeStack = ({ navigation }) => {
 	return (
@@ -56,7 +57,7 @@ export const HomeStack = ({ navigation }) => {
 								size={24}
 								style={{ paddingHorizontal: 15 }}
 								color="#000"
-								onPress={() => navigation.goBack()}
+								onPress={() => navigation.navigate('HomeScreen')}
 							/>
 						),
 					}}
@@ -71,12 +72,60 @@ export const HomeStack = ({ navigation }) => {
 								size={24}
 								style={{ paddingHorizontal: 15 }}
 								color="#000"
-								onPress={() => navigation.goBack()}
+								onPress={() => navigation.navigate('HomeScreen')}
 							/>
 						),
 					}}
 				/>
 			</HomeStackScreen.Navigator>
 		</>
+	);
+};
+
+export const ProfileStack = ({ navigation }) => {
+	return (
+		<ProfileStackScreen.Navigator
+			screenOptions={{
+				cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+				presentation: 'card', // modal
+			}}
+		>
+			<HomeStackScreen.Screen
+				headerMode="screen"
+				name="ProfileScreen"
+				component={Profile}
+				options={{
+					title: 'Profile',
+					headerRight: () => (
+						<View style={{ flexDirection: 'row' }}>
+							<Feather
+								name="bell"
+								size={20}
+								style={{ paddingHorizontal: 15 }}
+								color="#000"
+								onPress={() => navigation.navigate('ProfileNotifications')}
+							/>
+						</View>
+					),
+				}}
+			/>
+			<HomeStackScreen.Screen
+				headerMode="screen"
+				name="ProfileNotifications"
+				component={Notifications}
+				options={{
+					title: 'Notifications',
+					headerLeft: () => (
+						<AntDesign
+							name="close"
+							size={24}
+							style={{ paddingHorizontal: 15 }}
+							color="#000"
+							onPress={() => navigation.navigate('ProfileScreen')}
+						/>
+					),
+				}}
+			/>
+		</ProfileStackScreen.Navigator>
 	);
 };

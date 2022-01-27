@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	StyleSheet,
@@ -12,6 +12,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import ActionSheet from 'react-native-actions-sheet';
+import { getSurveys, getCurrentSurveyQuiz } from '../../store/actions/Surveys';
 
 const actionSheetRef = createRef();
 
@@ -21,12 +22,27 @@ const sheet_height_ios = height * 0.8;
 const sheet_height_android = height * 0.75;
 
 const Home = ({ navigation }) => {
-	// let authUser = useSelector((state) => state?.auth?.user);
+	const dispatch = useDispatch();
+	let authUser = useSelector((state) => state.auth);
+	let surveys = useSelector((state) => state.surveys);
+
+	const [currentSurvey, setCurrentSurvey] = useState([]);
+
+	useEffect(() => {
+		dispatch(getSurveys());
+	}, []);
+
+	const viewSurvey = (survey) => {
+		actionSheetRef.current?.setModalVisible();
+		setCurrentSurvey(survey);
+		dispatch(getCurrentSurveyQuiz(survey.id));
+	};
 
 	const openSurveyDetails = () => {
 		actionSheetRef.current?.setModalVisible(false);
 		navigation.navigate('SurveyDetails');
 	};
+
 	return (
 		<>
 			<ActionSheet
@@ -49,7 +65,7 @@ const Home = ({ navigation }) => {
 				>
 					<View>
 						<Text style={{ fontSize: 20, fontWeight: '600' }}>
-							Product Launch
+							{currentSurvey?.title}
 						</Text>
 						<View
 							style={{
@@ -59,8 +75,8 @@ const Home = ({ navigation }) => {
 								justifyContent: 'flex-start',
 							}}
 						>
-							<Text style={{ color: 'gray', paddingRight: 38 }}>Host</Text>
-							<Text style={{ fontSize: 18 }}>Great Research</Text>
+							<Text style={{ color: 'gray', paddingRight: 38 }}>Title</Text>
+							<Text style={{ fontSize: 18 }}>{currentSurvey?.title}</Text>
 						</View>
 						<View
 							style={{
@@ -71,7 +87,12 @@ const Home = ({ navigation }) => {
 							}}
 						>
 							<Text style={{ color: 'gray' }}>Category</Text>
-							<Text style={{ fontSize: 18, paddingLeft: 10 }}>Marketing</Text>
+							<Text style={{ fontSize: 18, paddingLeft: 10 }}>
+								{currentSurvey?.category?.name}
+							</Text>
+						</View>
+						<View style={{ marginVertical: 10 }}>
+							<Text>{currentSurvey?.description}</Text>
 						</View>
 					</View>
 					<View
@@ -96,154 +117,49 @@ const Home = ({ navigation }) => {
 					style={{ paddingHorizontal: 20, marginBottom: 95, paddingBottom: 5 }}
 					showsVerticalScrollIndicator={false}
 				>
-					<Text style={styles.textGreetings}>Hey, User!</Text>
+					<Text style={styles.textGreetings}>
+						Hey, {authUser?.user?.first_name}!
+					</Text>
 					<Text style={styles.textTitle}>Pick Best Survey For You</Text>
 					<Text style={styles.textSubtitle}>Existing Survey</Text>
-					<View style={styles.surveyContainer}>
-						<View style={{ width: '35%' }}>
-							<Image
-								source={require('../../../assets/survey.png')}
-								style={styles.image}
-							/>
-						</View>
-						<View style={[styles.surveyContent, { width: '65%' }]}>
-							<View style={styles.surveyCategory}>
-								<Text style={{ color: '#fff', fontSize: 12 }}>Marketing</Text>
+
+					{surveys.surveys?.map((survey, index) => {
+						const { id, title, image, category, description } = survey;
+						return (
+							<View key={id} style={styles.surveyContainer}>
+								<View style={{ width: '35%' }}>
+									<Image source={{ uri: `${image}` }} style={styles.image} />
+								</View>
+								<View style={[styles.surveyContent, { width: '65%' }]}>
+									<View style={styles.surveyCategory}>
+										<Text style={{ color: '#fff', fontSize: 12 }}>
+											{category.name}
+										</Text>
+									</View>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											fontSize: 15,
+											paddingVertical: 3,
+										}}
+									>
+										{title}
+									</Text>
+									<Text style={{ color: 'gray', fontSize: 12 }}>
+										{description}
+									</Text>
+									<View style={{ alignItems: 'center', width: '80%' }}>
+										<TouchableOpacity
+											style={styles.surveyButton}
+											onPress={() => viewSurvey(survey)}
+										>
+											<Text style={{ color: '#fff' }}>View survey</Text>
+										</TouchableOpacity>
+									</View>
+								</View>
 							</View>
-							<Text
-								style={{ fontWeight: 'bold', fontSize: 15, paddingVertical: 3 }}
-							>
-								Product Launch Survey
-							</Text>
-							<Text style={{ color: 'gray', fontSize: 12 }}>
-								Easy Payment & Gift Card
-							</Text>
-							<View style={{ alignItems: 'center', width: '80%' }}>
-								<TouchableOpacity
-									style={styles.surveyButton}
-									onPress={() => actionSheetRef.current?.setModalVisible()}
-								>
-									<Text style={{ color: '#fff' }}>View survey</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View style={styles.surveyContainer}>
-						<View style={{ width: '35%' }}>
-							<Image
-								source={require('../../../assets/survey.png')}
-								style={styles.image}
-							/>
-						</View>
-						<View style={[styles.surveyContent, { width: '65%' }]}>
-							<View style={styles.surveyCategory}>
-								<Text style={{ color: '#fff', fontSize: 12 }}>Marketing</Text>
-							</View>
-							<Text
-								style={{ fontWeight: 'bold', fontSize: 15, paddingVertical: 3 }}
-							>
-								Product Launch Survey
-							</Text>
-							<Text style={{ color: 'gray', fontSize: 12 }}>
-								Easy Payment & Gift Card
-							</Text>
-							<View style={{ alignItems: 'center', width: '80%' }}>
-								<TouchableOpacity
-									style={styles.surveyButton}
-									onPress={() => actionSheetRef.current?.setModalVisible()}
-								>
-									<Text style={{ color: '#fff' }}>View survey</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View style={styles.surveyContainer}>
-						<View style={{ width: '35%' }}>
-							<Image
-								source={require('../../../assets/survey.png')}
-								style={styles.image}
-							/>
-						</View>
-						<View style={[styles.surveyContent, { width: '65%' }]}>
-							<View style={styles.surveyCategory}>
-								<Text style={{ color: '#fff', fontSize: 12 }}>Marketing</Text>
-							</View>
-							<Text
-								style={{ fontWeight: 'bold', fontSize: 15, paddingVertical: 3 }}
-							>
-								Product Launch Survey
-							</Text>
-							<Text style={{ color: 'gray', fontSize: 12 }}>
-								Easy Payment & Gift Card
-							</Text>
-							<View style={{ alignItems: 'center', width: '80%' }}>
-								<TouchableOpacity
-									style={styles.surveyButton}
-									onPress={() => actionSheetRef.current?.setModalVisible()}
-								>
-									<Text style={{ color: '#fff' }}>View survey</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View style={styles.surveyContainer}>
-						<View style={{ width: '35%' }}>
-							<Image
-								source={require('../../../assets/survey.png')}
-								style={styles.image}
-							/>
-						</View>
-						<View style={[styles.surveyContent, { width: '65%' }]}>
-							<View style={styles.surveyCategory}>
-								<Text style={{ color: '#fff', fontSize: 12 }}>Marketing</Text>
-							</View>
-							<Text
-								style={{ fontWeight: 'bold', fontSize: 15, paddingVertical: 3 }}
-							>
-								Product Launch Survey
-							</Text>
-							<Text style={{ color: 'gray', fontSize: 12 }}>
-								Easy Payment & Gift Card
-							</Text>
-							<View style={{ alignItems: 'center', width: '80%' }}>
-								<TouchableOpacity
-									style={styles.surveyButton}
-									onPress={() => actionSheetRef.current?.setModalVisible()}
-								>
-									<Text style={{ color: '#fff' }}>View survey</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-					<View style={styles.surveyContainer}>
-						<View style={{ width: '35%' }}>
-							<Image
-								source={require('../../../assets/survey.png')}
-								style={styles.image}
-							/>
-						</View>
-						<View style={[styles.surveyContent, { width: '65%' }]}>
-							<View style={styles.surveyCategory}>
-								<Text style={{ color: '#fff', fontSize: 12 }}>Marketing</Text>
-							</View>
-							<Text
-								style={{ fontWeight: 'bold', fontSize: 15, paddingVertical: 3 }}
-							>
-								Product Launch Survey
-							</Text>
-							<Text style={{ color: 'gray', fontSize: 12 }}>
-								Easy Payment & Gift Card
-							</Text>
-							<View style={{ alignItems: 'center', width: '80%' }}>
-								<TouchableOpacity
-									style={styles.surveyButton}
-									onPress={() => actionSheetRef.current?.setModalVisible()}
-								>
-									<Text style={{ color: '#fff' }}>View survey</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
+						);
+					})}
 				</ScrollView>
 			</SafeAreaView>
 		</>
@@ -309,7 +225,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: 80,
 		padding: 3,
-		backgroundColor: '#f4338f',
+		backgroundColor: '#F79974',
 		borderRadius: 50,
 	},
 	surveyContent: {
@@ -321,7 +237,7 @@ const styles = StyleSheet.create({
 		width: 95,
 		marginTop: 5,
 		padding: 8,
-		backgroundColor: '#0052ff',
+		backgroundColor: '#7CC89A',
 		borderRadius: 50,
 	},
 	startSurveyButton: {
@@ -329,7 +245,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		marginTop: 5,
 		padding: 15,
-		backgroundColor: '#0052ff',
+		backgroundColor: '#7CC89A',
 		borderRadius: 50,
 	},
 	image: {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Details, Profile } from '../screens/app';
-import { HomeStack } from './AppStack';
+import { Details } from '../screens/app';
+import { HomeStack, ProfileStack } from './AppStack';
 
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 
@@ -19,7 +19,7 @@ const AppTabStack = () => {
 					{
 						position: 'absolute',
 						height: 70,
-						bottom: 25,
+						bottom: 20,
 						left: 20,
 						right: 20,
 						backgroundColor: '#fff',
@@ -58,7 +58,7 @@ const AppTabStack = () => {
 					),
 				}}
 			/>
-			<Tab.Screen
+			{/* <Tab.Screen
 				name="Details"
 				component={Details}
 				options={{
@@ -87,10 +87,10 @@ const AppTabStack = () => {
 						</View>
 					),
 				}}
-			/>
+			/> */}
 			<Tab.Screen
 				name="Profile"
-				component={Profile}
+				component={ProfileStack}
 				options={{
 					title: 'Profile & Settings',
 					tabBarIcon: ({ focused }) => (

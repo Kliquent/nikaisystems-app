@@ -10,7 +10,7 @@ export const Colors = {
 	secondary: '#E5E7EB',
 	tertiary: '#1F2937',
 	darkLight: '#9CA3AF',
-	brand: '#0052ff',
+	brand: '#7CC89A',
 	green: '#10B981',
 	red: '#EF4444',
 };

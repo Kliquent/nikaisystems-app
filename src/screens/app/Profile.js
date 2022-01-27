@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { StyledButton, ButtonText } from '../../components/styles';
-import { logOut } from '../../store/actions/Auth';
+import { auth, logOut } from '../../store/actions/Auth';
 
 const Profile = () => {
 	const dispatch = useDispatch();
-	let authUser = useSelector((state) => state.auth.user);
+	let authUser = useSelector((state) => state.auth);
 
 	console.log(authUser);
 
@@ -20,9 +20,12 @@ const Profile = () => {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.innerContainer}>
 				<Text style={{ marginBottom: 10, fontSize: 20 }}>Your Profile</Text>
-				<Text style={styles.text}>John Doe</Text>
+				<View style={{ flexDirection: 'row' }}>
+					<Text style={styles.text}>{authUser?.user?.first_name}</Text>
+					<Text style={styles.text}>{authUser?.user?.last_name}</Text>
+				</View>
 				<Text style={styles.textRole}>Researcher</Text>
-				<Text style={styles.textRole}>+254798617890</Text>
+				<Text style={styles.textRole}>{authUser?.user?.phone}</Text>
 				<StyledButton
 					style={{ width: '80%', marginTop: 50 }}
 					disabled={buttonLoading ? true : false}
@@ -62,5 +65,6 @@ const styles = StyleSheet.create({
 	textRole: {
 		fontSize: 20,
 		color: 'gray',
+		paddingVertical: 5,
 	},
 });

@@ -9,7 +9,7 @@ const AuthStackScreen = createStackNavigator();
 const AuthStack = () => {
 	return (
 		<AuthStackScreen.Navigator screenOptions={{ headerShown: false }}>
-			<AuthStackScreen.Screen name="OnBoarding" component={OnBoarding} />
+			{/* <AuthStackScreen.Screen name="OnBoarding" component={OnBoarding} /> */}
 			<AuthStackScreen.Screen name="Login" component={Login} />
 		</AuthStackScreen.Navigator>
 	);

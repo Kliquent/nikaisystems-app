@@ -40,7 +40,6 @@ const Login = () => {
 	};
 
 	const onSubmit = async (data) => {
-		console.log(data);
 		// Attempt to authenticate user
 		setButtonLoading(true);
 		await dispatch(loginUser(data));
@@ -65,7 +64,7 @@ const Login = () => {
 		<TextInputAvoidingView>
 			<Animated.View style={styles.container}>
 				<LinearGradient
-					colors={['#ff00cc', '#333399']}
+					colors={['#F79974', '#7CC89A']}
 					style={[styles.centerAlign, { paddingBottom: 5, height: height / 3 }]}
 				>
 					<Image
@@ -103,7 +102,7 @@ const Login = () => {
 									value={value}
 									theme={{
 										colors: {
-											primary: '#0052ff',
+											primary: '#7CC89A',
 											underlineColor: 'transparent',
 										},
 									}}
@@ -137,7 +136,7 @@ const Login = () => {
 									value={value}
 									theme={{
 										colors: {
-											primary: '#0052ff',
+											primary: '#7CC89A',
 											underlineColor: 'transparent',
 										},
 									}}

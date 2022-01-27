@@ -40,12 +40,16 @@ export const auth = () => async (dispatch) => {
 		// console.log(data);
 
 		await dispatch({
+			type: USER_LOADING,
+		});
+
+		await dispatch({
 			type: AUTH_USER,
 			payload: data,
 		});
 		dispatch(clearErrors());
 	} catch (error) {
-		console.log(error);
+		// console.log(error);
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'AUTH_ERROR')
 		);
@@ -70,14 +74,19 @@ export const loginUser = (payload) => async (dispatch) => {
 		const body = JSON.stringify({ email, password });
 
 		const response = await axios.post(`${NIKIAI_URL}/login`, body, config);
-		console.log(response.data);
+		// console.log(response.data);
 		const data = await response.data;
 		await save('userToken', data.token);
+
+		await dispatch({
+			type: USER_LOADING,
+		});
 
 		await dispatch({
 			type: LOGIN_SUCCESS,
 			payload: data,
 		});
+		dispatch(auth());
 		Toast.show({
 			type: 'success',
 			text1: `You're now logged in successfully!`,
