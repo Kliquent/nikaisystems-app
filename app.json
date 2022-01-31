@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "survey-app-rn",
-		"slug": "survey-app-rn",
-		"version": "1.0.0",
+		"name": "NikiAI App",
+		"slug": "kliqueentertainmentnikiaiapp",
+		"version": "0.1.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -18,6 +18,8 @@
 			"supportsTablet": true
 		},
 		"android": {
+			"package": "kliqueentertainment.nikiaiapp",
+			"versionCode": 1,
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"

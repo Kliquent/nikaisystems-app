@@ -45,11 +45,11 @@ const AppTabStack = () => {
 							<AntDesign
 								name="home"
 								size={22}
-								color={focused ? '#0052ff' : 'gray'}
+								color={focused ? '#7CC89A' : 'gray'}
 							/>
 							<Text
 								style={{
-									color: focused ? '#0052ff' : 'gray',
+									color: focused ? '#7CC89A' : 'gray',
 								}}
 							>
 								Home
@@ -104,11 +104,11 @@ const AppTabStack = () => {
 							<AntDesign
 								name="profile"
 								size={22}
-								color={focused ? '#0052ff' : 'gray'}
+								color={focused ? '#7CC89A' : 'gray'}
 							/>
 							<Text
 								style={{
-									color: focused ? '#0052ff' : 'gray',
+									color: focused ? '#7CC89A' : 'gray',
 								}}
 							>
 								Profile

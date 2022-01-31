@@ -118,6 +118,7 @@ export const postSurveyeeResponse = (payload) => async (dispatch) => {
 		dispatch(resetSurveyeeResponseSuccess());
 		dispatch(clearErrors());
 	} catch (error) {
+		// console.log(error.response.data);
 		dispatch(
 			returnErrors(
 				error.response.data,

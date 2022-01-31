@@ -82,7 +82,7 @@ const SurveyDetails = ({ navigation }) => {
 		}
 	};
 
-	const handleNext = () => {
+	const handleNext = async () => {
 		if (currentQuestionIndex == surveyQuiz?.currentSurveyQuiz?.length - 1) {
 			// Handle last quiz dispatch
 			// dispatch checkBoxes response
@@ -93,7 +93,7 @@ const SurveyDetails = ({ navigation }) => {
 			setCheckSelectedOption([]);
 
 			// dispatch radioButton response
-			dispatch(postSurveyeeResponse(selectedOption));
+			await dispatch(postSurveyeeResponse(selectedOption));
 			// Clear state to avoid sending duplicate data
 			setSelectedOption([]);
 
@@ -108,7 +108,7 @@ const SurveyDetails = ({ navigation }) => {
 			setCheckSelectedOption([]);
 
 			// dispatch radioButton response
-			dispatch(postSurveyeeResponse(selectedOption));
+			await dispatch(postSurveyeeResponse(selectedOption));
 			// Clear state to avoid sending duplicate data
 			setSelectedOption([]);
 
