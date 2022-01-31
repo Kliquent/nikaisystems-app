@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-	StyleSheet,
 	ScrollView,
 	View,
 	Text,
@@ -13,68 +12,106 @@ import {
 	Modal,
 	Animated,
 } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
+import Toast from 'react-native-toast-message';
 import { COLORS, SIZES } from '../../constants';
-import data from '../../../data';
-import { styles } from '../auth/styles';
-import TextInputAvoidingView from '../../components/KeyboardAvoiding';
-import {
-	Checkbox,
-	RadioButton,
-	TextInput,
-	HelperText,
-} from 'react-native-paper';
+import { postSurveyeeResponse } from '../../store/actions/Surveys';
+import { clearErrors } from '../../store/actions/Error';
+import { Checkbox, RadioButton } from 'react-native-paper';
 
 const { height } = Dimensions.get('screen');
 
-const SurveyDetails = () => {
+const SurveyDetails = ({ navigation }) => {
 	const dispatch = useDispatch();
-	const allQuestions = data;
 	let surveyQuiz = useSelector((state) => state.surveys);
+	let currentSurveyee = useSelector((state) => state.surveys);
+	let error = useSelector((state) => state.error);
 
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [selectedOption, setSelectedOption] = useState(false);
+	const [checkSelectedOption, setCheckSelectedOption] = useState([]);
 	const [showNextButton, setShowNextButton] = useState(false);
-	const [showFormModal, setShowFormModal] = useState(false);
 	const [showCompleteModal, setShowCompleteModal] = useState(false);
 	const [progress, setProgress] = useState(new Animated.Value(0));
 
 	const progressAnim = progress.interpolate({
-		inputRange: [0, surveyQuiz?.currentSurveyQuiz.length],
+		inputRange: [0, surveyQuiz?.currentSurveyQuiz?.length],
 		outputRange: ['0%', '100%'],
 	});
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm({ mode: 'onBlur' });
-
 	const validateAnswer = (option) => {
-		setSelectedOption(option);
+		if (
+			surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]?.input_type?.name ==
+			'CheckBoxes'
+		) {
+			const body = {
+				surveyee_id: currentSurveyee?.currentSurveyee?.id,
+				question_id: surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]?.id,
+				option_id: option.id,
+				option_title: option.title,
+			};
 
-		// Body params
-		const body = {
-			surveyee_id: '',
-			question_id: surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]?.id,
-			option_id: option.id,
-			option_title: option.title,
-		};
+			let newArray = checkSelectedOption.slice();
 
-		console.log(body);
+			if (
+				newArray[newArray?.findIndex((x) => x.option_id === option.id)]
+					?.option_id === option.id
+			) {
+				let filteredItems = newArray.filter(
+					(item) => item.option_id !== option.id
+				);
+				setCheckSelectedOption(filteredItems);
+			} else {
+				newArray.push(body);
+				setCheckSelectedOption(newArray);
+			}
 
-		// dispatch redux
+			// Show Next Button
+			setShowNextButton(true);
+		} else {
+			// Body params
+			const body = {
+				surveyee_id: currentSurveyee?.currentSurveyee?.id,
+				question_id: surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]?.id,
+				option_id: option.id,
+				option_title: option.title,
+			};
+			setSelectedOption(body);
 
-		// Show Next Button
-		setShowNextButton(true);
+			// Show Next Button
+			setShowNextButton(true);
+		}
 	};
 
 	const handleNext = () => {
 		if (currentQuestionIndex == surveyQuiz?.currentSurveyQuiz?.length - 1) {
-			// Last Question
+			// Handle last quiz dispatch
+			// dispatch checkBoxes response
+			checkSelectedOption?.map(async (option) => {
+				await dispatch(postSurveyeeResponse(option));
+			});
+			// Clear state to avoid sending duplicate data
+			setCheckSelectedOption([]);
+
+			// dispatch radioButton response
+			dispatch(postSurveyeeResponse(selectedOption));
+			// Clear state to avoid sending duplicate data
+			setSelectedOption([]);
+
 			// Show Score Modal
 			setShowCompleteModal(true);
 		} else {
+			// dispatch checkBoxes response
+			checkSelectedOption?.map(async (option) => {
+				await dispatch(postSurveyeeResponse(option));
+			});
+			// Clear state to avoid sending duplicate data
+			setCheckSelectedOption([]);
+
+			// dispatch radioButton response
+			dispatch(postSurveyeeResponse(selectedOption));
+			// Clear state to avoid sending duplicate data
+			setSelectedOption([]);
+
 			setCurrentQuestionIndex(currentQuestionIndex + 1);
 			setShowNextButton(false);
 		}
@@ -85,11 +122,12 @@ const SurveyDetails = () => {
 		}).start();
 	};
 
-	const restartQuiz = () => {
+	const restartQuiz = async () => {
 		setShowCompleteModal(false);
-		setShowFormModal(true);
 		setCurrentQuestionIndex(0);
 		setShowNextButton(false);
+		setCheckSelectedOption([]);
+		navigation.navigate('SurveyeeForm');
 		Animated.timing(progress, {
 			toValue: 0,
 			duration: 1000,
@@ -145,7 +183,8 @@ const SurveyDetails = () => {
 				<ScrollView showsVerticalScrollIndicator={false}>
 					{surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]?.options?.map(
 						(option) => {
-							const { id, question_id, title, description } = option;
+							const { id, title } = option;
+
 							return (
 								<Fragment key={id}>
 									{surveyQuiz?.currentSurveyQuiz[currentQuestionIndex]
@@ -154,7 +193,14 @@ const SurveyDetails = () => {
 											labelStyle={{ color: '#fff' }}
 											label={title}
 											status={
-												id === selectedOption.id ? 'checked' : 'indeterminate'
+												id ===
+												checkSelectedOption[
+													checkSelectedOption?.findIndex(
+														(x) => x.option_id === id
+													)
+												]?.option_id
+													? 'checked'
+													: 'unchecked'
 											}
 											onPress={() => {
 												validateAnswer(option);
@@ -164,7 +210,9 @@ const SurveyDetails = () => {
 										<RadioButton.Group>
 											<RadioButton.Item
 												status={
-													id === selectedOption.id ? 'checked' : 'unchecked'
+													id === selectedOption.option_id
+														? 'checked'
+														: 'unchecked'
 												}
 												onPress={() => {
 													validateAnswer(option);
@@ -235,7 +283,23 @@ const SurveyDetails = () => {
 		);
 	};
 
-	const onSubmit = () => {};
+	// useEffect(() => {
+	// 	if (currentSurveyee.responseSuccess) {
+	// 		handleNext();
+	// 	}
+	// }, [currentSurveyee.responseSuccess]);
+
+	useEffect(() => {
+		// Check for register error
+		if (error.id === 'SURVEY_RESPONSE_ERROR') {
+			Toast.show({
+				type: 'error',
+				text1: 'Server error. Please try again later!',
+				text2: 'We are currently experiencing issues.',
+			});
+			dispatch(clearErrors());
+		}
+	}, [error]);
 
 	return (
 		<SafeAreaView
@@ -265,112 +329,6 @@ const SurveyDetails = () => {
 
 				{/* Next Button */}
 				{renderNextButton()}
-
-				{/* Surveyee Form Modal */}
-				<Modal animationType="slide" transparent={true} visible={showFormModal}>
-					<TextInputAvoidingView>
-						<View
-							style={{
-								flex: 1,
-								backgroundColor: '#838084',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<View style={styles.inputFormContainer}>
-								<Text
-									style={{
-										fontSize: 20,
-										fontWeight: 'bold',
-										textAlign: 'center',
-									}}
-								>
-									SURVEYEE FORM
-								</Text>
-								<Controller
-									control={control}
-									name="first_name"
-									render={({ field: { onChange, value, onBlur } }) => (
-										<TextInput
-											mode="outlined"
-											autoFocus={Platform.OS === 'ios' ? true : false}
-											label="First Name"
-											placeholder="Enter your First Name"
-											value={value}
-											theme={{
-												colors: {
-													primary: '#7CC89A',
-													underlineColor: 'transparent',
-												},
-											}}
-											onBlur={onBlur}
-											onChangeText={(value) => onChange(value)}
-										/>
-									)}
-									rules={{
-										required: {
-											value: true,
-											message: 'First name is required',
-										},
-									}}
-								/>
-								<HelperText type="error" style={styles.helper}>
-									{errors?.first_name?.message}
-								</HelperText>
-								<Controller
-									control={control}
-									name="last_name"
-									render={({ field: { onChange, value, onBlur } }) => (
-										<TextInput
-											mode="outlined"
-											label="Last Name"
-											placeholder="Enter your Last Name"
-											value={value}
-											theme={{
-												colors: {
-													primary: '#7CC89A',
-													underlineColor: 'transparent',
-												},
-											}}
-											onBlur={onBlur}
-											onChangeText={(value) => onChange(value)}
-										/>
-									)}
-									rules={{
-										required: {
-											value: true,
-											message: 'Last name is required',
-										},
-									}}
-								/>
-								<HelperText type="error" style={styles.helper}>
-									{errors?.last_name?.message}
-								</HelperText>
-
-								<TouchableOpacity
-									onPress={() => setShowFormModal(false)}
-									style={{
-										marginTop: 10,
-										width: '100%',
-										backgroundColor: '#7CC89A',
-										padding: 20,
-										borderRadius: 50,
-									}}
-								>
-									<Text
-										style={{
-											fontSize: 20,
-											color: COLORS.white,
-											textAlign: 'center',
-										}}
-									>
-										Cancel
-									</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</TextInputAvoidingView>
-				</Modal>
 
 				{/* Complete Modal */}
 				<Modal

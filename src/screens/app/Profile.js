@@ -8,8 +8,6 @@ const Profile = () => {
 	const dispatch = useDispatch();
 	let authUser = useSelector((state) => state.auth);
 
-	console.log(authUser);
-
 	const [buttonLoading, setButtonLoading] = useState(false);
 
 	const signOut = async () => {

@@ -8,6 +8,7 @@ import { Octicons, Feather, AntDesign } from '@expo/vector-icons';
 import {
 	Home,
 	Details,
+	SurveyeeForm,
 	SurveyDetails,
 	Profile,
 	Notifications,
@@ -51,6 +52,24 @@ export const HomeStack = ({ navigation }) => {
 					component={SurveyDetails}
 					options={{
 						title: 'Current Survey',
+						headerLeft: () => (
+							<AntDesign
+								name="close"
+								size={24}
+								style={{ paddingHorizontal: 15 }}
+								color="#000"
+								onPress={() => navigation.navigate('HomeScreen')}
+							/>
+						),
+					}}
+				/>
+				<HomeStackScreen.Screen
+					headerMode="screen"
+					name="SurveyeeForm"
+					cardStyle={{ zIndex: 1000 }}
+					component={SurveyeeForm}
+					options={{
+						title: 'Surveyee Form',
 						headerLeft: () => (
 							<AntDesign
 								name="close"

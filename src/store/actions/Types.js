@@ -10,4 +10,9 @@ export const GET_SURVEY = 'get_survey';
 export const SURVEY_LOADING = 'survey_loading';
 export const CURRENT_SURVEY_QUIZ = 'current_survey_quiz';
 export const CLEAR_CURRENT_SURVEY = 'clear_current_survey';
+export const POST_SURVEYEE_RESPONSE = 'post_surveyee_response';
+export const POST_SURVEYEE = 'post_surveyee';
+export const RESET_SURVEYEE_SUCCESS = 'reset_surveyee_success';
+export const RESET_SURVEYEE_RESPONSE_SUCCESS =
+	'reset_surveyee_response_success';
 export const SURVEY_ERROR = 'survey_error';

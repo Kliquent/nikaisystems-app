@@ -40,7 +40,7 @@ const Home = ({ navigation }) => {
 
 	const openSurveyDetails = () => {
 		actionSheetRef.current?.setModalVisible(false);
-		navigation.navigate('SurveyDetails');
+		navigation.navigate('SurveyeeForm');
 	};
 
 	return (
@@ -123,43 +123,49 @@ const Home = ({ navigation }) => {
 					<Text style={styles.textTitle}>Pick Best Survey For You</Text>
 					<Text style={styles.textSubtitle}>Existing Survey</Text>
 
-					{surveys.surveys?.map((survey, index) => {
-						const { id, title, image, category, description } = survey;
-						return (
-							<View key={id} style={styles.surveyContainer}>
-								<View style={{ width: '35%' }}>
-									<Image source={{ uri: `${image}` }} style={styles.image} />
-								</View>
-								<View style={[styles.surveyContent, { width: '65%' }]}>
-									<View style={styles.surveyCategory}>
-										<Text style={{ color: '#fff', fontSize: 12 }}>
-											{category.name}
-										</Text>
+					{surveys.surveys?.length > 0 ? (
+						surveys.surveys?.map((survey) => {
+							const { id, title, image, category, description } = survey;
+							return (
+								<View key={id} style={styles.surveyContainer}>
+									<View style={{ width: '35%' }}>
+										<Image source={{ uri: `${image}` }} style={styles.image} />
 									</View>
-									<Text
-										style={{
-											fontWeight: 'bold',
-											fontSize: 15,
-											paddingVertical: 3,
-										}}
-									>
-										{title}
-									</Text>
-									<Text style={{ color: 'gray', fontSize: 12 }}>
-										{description}
-									</Text>
-									<View style={{ alignItems: 'center', width: '80%' }}>
-										<TouchableOpacity
-											style={styles.surveyButton}
-											onPress={() => viewSurvey(survey)}
+									<View style={[styles.surveyContent, { width: '65%' }]}>
+										<View style={styles.surveyCategory}>
+											<Text style={{ color: '#fff', fontSize: 12 }}>
+												{category.name}
+											</Text>
+										</View>
+										<Text
+											style={{
+												fontWeight: 'bold',
+												fontSize: 15,
+												paddingVertical: 3,
+											}}
 										>
-											<Text style={{ color: '#fff' }}>View survey</Text>
-										</TouchableOpacity>
+											{title}
+										</Text>
+										<Text style={{ color: 'gray', fontSize: 12 }}>
+											{description}
+										</Text>
+										<View style={{ alignItems: 'center', width: '80%' }}>
+											<TouchableOpacity
+												style={styles.surveyButton}
+												onPress={() => viewSurvey(survey)}
+											>
+												<Text style={{ color: '#fff' }}>View survey</Text>
+											</TouchableOpacity>
+										</View>
 									</View>
 								</View>
-							</View>
-						);
-					})}
+							);
+						})
+					) : (
+						<Text style={{ textAlign: 'center', marginTop: 50 }}>
+							No Surveys Assigned to you
+						</Text>
+					)}
 				</ScrollView>
 			</SafeAreaView>
 		</>
