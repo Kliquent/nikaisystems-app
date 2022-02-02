@@ -106,7 +106,7 @@ export const postSurveyeeResponse = (payload) => async (dispatch) => {
 		const response = await axios.post(`${NIKIAI_URL}/responses`, body, token);
 
 		const data = await response.data;
-		// console.log(data);
+		console.log(data);
 		await dispatch({
 			type: SURVEY_LOADING,
 		});
@@ -118,7 +118,7 @@ export const postSurveyeeResponse = (payload) => async (dispatch) => {
 		dispatch(resetSurveyeeResponseSuccess());
 		dispatch(clearErrors());
 	} catch (error) {
-		// console.log(error.response.data);
+		console.log(error.response.data);
 		dispatch(
 			returnErrors(
 				error.response.data,
