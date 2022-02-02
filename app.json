@@ -1,8 +1,8 @@
 {
 	"expo": {
-		"name": "NikiAI App",
-		"slug": "kliqueentertainmentnikiaiapp",
-		"version": "0.1.2",
+		"name": "Niki [AI] Systems",
+		"slug": "com.nikiaisystems.app",
+		"version": "0.1.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -18,8 +18,8 @@
 			"supportsTablet": true
 		},
 		"android": {
-			"package": "kliqueentertainment.nikiaiapp",
-			"versionCode": 3,
+			"package": "com.nikiaisystems.app",
+			"versionCode": 1,
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
