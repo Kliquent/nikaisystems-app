@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "Niki [AI] Systems",
 		"slug": "nikiaisystems",
-		"version": "0.1.5",
+		"version": "0.1.6",
 		"owner": "kifaru_africa",
 		"orientation": "portrait",
 		"icon": "./assets/adaptive-icon.png",
@@ -20,7 +20,7 @@
 		},
 		"android": {
 			"package": "com.nikiaisystems.app",
-			"versionCode": 6,
+			"versionCode": 7,
 			"permissions": ["NOTIFICATIONS"],
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
