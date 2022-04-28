@@ -292,11 +292,11 @@ const SurveyDetails = ({ navigation }) => {
 	useEffect(() => {
 		// Check for register error
 		if (error.id === 'SURVEY_RESPONSE_ERROR') {
-			Toast.show({
-				type: 'error',
-				text1: 'Server error. Please try again later!',
-				text2: 'We are currently experiencing issues.',
-			});
+			// Toast.show({
+			// 	type: 'error',
+			// 	text1: 'Server error. Please try again later!',
+			// 	text2: 'We are currently experiencing issues.',
+			// });
 			dispatch(clearErrors());
 		}
 	}, [error]);
