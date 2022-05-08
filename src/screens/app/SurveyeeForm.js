@@ -61,11 +61,11 @@ const SurveyeeForm = ({ navigation }) => {
 		// Check for survey error
 		if (error.id === 'SURVEY_RESPONSE_ERROR') {
 			setButtonLoading(false);
-			Toast.show({
-				type: 'error',
-				text1: 'Server error. Please try again later!',
-				text2: 'We are currently experiencing issues.',
-			});
+			// Toast.show({
+			// 	type: 'error',
+			// 	text1: 'Server error. Please try again later!',
+			// 	text2: 'We are currently experiencing issues.',
+			// });
 			dispatch(clearErrors());
 		} else {
 			setButtonLoading(false);
